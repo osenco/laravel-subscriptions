@@ -1,14 +1,22 @@
 <?php
 
-namespace Osen\Subscriptions\Traits;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+namespace Osen\Subscriptions\Concerns;
+
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Osen\Subscriptions\Models\Subscription;
 use Osen\Subscriptions\Models\SubscriptionPlan;
 
 trait HasSubscriptions
 {
-    function subscribeTo(SubscriptionPlan $plan, int $count = 1) {}
+    function subscribeTo(SubscriptionPlan $plan, int $count = 1, $isTrial = false): Subscription {
+        $subscription = $this->subscriptions()->create([
+            'subscription_plan_id' => $plan->id,
+            'count'                => $count,
+            'ends_at'              => now()->addDays($plan->trial_days),
+        ]);
+
+        return $subscription;
+    }
 
     function isSubscribedTo(SubscriptionPlan $plan) {}
 

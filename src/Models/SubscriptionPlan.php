@@ -7,19 +7,20 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class SubscriptionPlan extends Model
 {
-    protected $guarded = [];
+    protected $casts = [
+        'price'     => 'float',
+        'discounts' => 'array',
+        'features'  => 'array',
+    ];
 
-    function sharedUpTo(int $count) {
-
-    }
-
-    function openlySharedUpTo(int $count) {
-
-    }
-
-    public function features()
+    function sharedUpTo(int $count)
     {
-        return $this->hasMany(SubscriptionFeature::class);
+
+    }
+
+    function openlySharedUpTo(int $count)
+    {
+
     }
 
     public function subscriptions()

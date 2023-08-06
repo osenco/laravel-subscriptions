@@ -20,4 +20,8 @@ class Subscription extends Facade
     {
         return app('subscription')->plan($plan);
     }
+
+    function renewOnce()
+    {
+    }
 }
