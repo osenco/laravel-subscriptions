@@ -1,0 +1,7 @@
+{
+    "name": "osenco/subscriptions",
+    "description": "A simple, plug and play subscription package",
+    "require": {
+        "php": ">=8.2"
+    }
+}
