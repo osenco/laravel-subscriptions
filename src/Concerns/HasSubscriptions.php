@@ -8,7 +8,8 @@ use Osen\Subscriptions\Models\SubscriptionPlan;
 
 trait HasSubscriptions
 {
-    function subscribeTo(SubscriptionPlan $plan, int $count = 1, $isTrial = false): Subscription {
+    function subscribeTo(SubscriptionPlan $plan, int $count = 1, $isTrial = false): Subscription
+    {
         $subscription = $this->subscriptions()->create([
             'subscription_plan_id' => $plan->id,
             'count'                => $count,
@@ -18,17 +19,35 @@ trait HasSubscriptions
         return $subscription;
     }
 
-    function isSubscribedTo(SubscriptionPlan $plan) {}
+    function upgradeTo(SubscriptionPlan $plan, SubscriptionPlan $from, int $count = 1, $isTrial = false): Subscription
+    {
+        $from->update(['canceled_at' => now()]);
+        
+        $subscription = $this->subscriptions()->create([
+            'subscription_plan_id' => $plan->id,
+            'count'                => $count,
+            'ends_at'              => now()->addDays($plan->trial_days),
+        ]);
 
-    function hasActiveSubscription() {
+        return $subscription;
+    }
+
+    function isSubscribedTo(SubscriptionPlan $plan)
+    {
+    }
+
+    function hasActiveSubscription()
+    {
         return $this->subscriptions()->active()->count() > 0;
     }
 
-    function plans(): HasManyThrough {
+    function plans(): HasManyThrough
+    {
         return $this->hasManyThrough(SubscriptionPlan::class, Subscription::class);
     }
 
-    function subscription(string $id = null) {
+    function subscription(string $id = null)
+    {
         if ($id) {
             return $this->subscriptions()->where('id', $id)->first();
         }
@@ -36,7 +55,8 @@ trait HasSubscriptions
         return $this->subscriptions()->active()->latest()->first();
     }
 
-    function subsriptions() {
+    function subsriptions()
+    {
         return $this->hasMany(Subscription::class);
     }
 }

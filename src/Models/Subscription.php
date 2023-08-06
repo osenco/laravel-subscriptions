@@ -63,7 +63,12 @@ class Subscription extends Model
 
     public function scopeSoon($query)
     {
-        return $query->whereDate('ends_at', '=<' , now()->addDays(7));
+        return $query->whereDate('ends_at', '=<', now()->addDays(7));
+    }
+
+    function scopeIsOnGracePeriod($query)
+    {
+        return $query->whereNotNull('canceled_at')->whereDate('ends_at', '>=', now());
     }
 
     function renewFor(int $count)
@@ -79,7 +84,7 @@ class Subscription extends Model
                 $this->ends_at->addWeeks($count);
                 break;
             case 'biweekly':
-                $this->ends_at->addWeeks(2*$count);
+                $this->ends_at->addWeeks(2 * $count);
                 break;
             case 'weeks':
                 $this->ends_at->addWeeks($count);
@@ -88,10 +93,10 @@ class Subscription extends Model
                 $this->ends_at->addMonths($count);
                 break;
             case 'bimonthly':
-                $this->ends_at->addMonths(2*$count);
+                $this->ends_at->addMonths(2 * $count);
                 break;
             case 'quarterly':
-                $this->ends_at->addMonths(3*$count);
+                $this->ends_at->addMonths(3 * $count);
                 break;
             case 'months':
                 $this->ends_at->addMonths($count);
@@ -100,10 +105,10 @@ class Subscription extends Model
                 $this->ends_at->addYears($count);
                 break;
             case 'bienially':
-                $this->ends_at->addYears(2*$count);
+                $this->ends_at->addYears(2 * $count);
                 break;
             case 'triennialy':
-                $this->ends_at->addYears(3*$count);
+                $this->ends_at->addYears(3 * $count);
                 break;
             case 'years':
                 $this->ends_at->addYears($count);
@@ -116,8 +121,9 @@ class Subscription extends Model
         return $this;
     }
 
-    function gracePeriod(Callable|int $period){
-        if(is_a($period, 'Closure')){
+    function gracePeriod(callable |int $period)
+    {
+        if (is_a($period, 'Closure')) {
             $period = $period($this);
         }
 
@@ -125,13 +131,21 @@ class Subscription extends Model
         return $this;
     }
 
-    function cancel($end = false){
+    function cancel($end = false)
+    {
         $this->canceled_at = now();
 
-        if($end){
+        if ($end) {
             $this->ends_at = now();
         }
 
+        $this->save();
+        return $this;
+    }
+
+    function adjustStart(int $days)
+    {
+        $this->starts_at = now()->addDays($days);
         $this->save();
         return $this;
     }
