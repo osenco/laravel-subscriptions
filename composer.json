@@ -1,17 +1,48 @@
 {
     "name": "osenco/subscriptions",
     "description": "A simple, plug and play subscription package",
+    "keywords": [
+        "laravel",
+        "subscriptions",
+        "package"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Osen",
+            "email": "hi@osen.co.ke",
+            "homepage": "htps://osen.co.ke"
+        }
+    ],
     "require": {
-        "php": ">=8.2"
+        "php": ">=8.2",
+        "illuminate/support": "^8.0"
     },
     "extra": {
-    "laravel": {
-        "providers": [
-            "Barryvdh\\Debugbar\\ServiceProvider"
-        ],
-        "aliases": {
-            "Debugbar": "Barryvdh\\Debugbar\\Facade"
+        "laravel": {
+            "providers": [
+                "Osen\\Subscriptions\\SubscriptionsServiceProvider"
+            ],
+            "aliases": {
+                "Subscriptions": "Osen\\Subscriptions\\SubscriptionsFacade"
+            }
         }
+    },
+    "autoload": {
+        "psr-4": {
+            "Osen\\Subscriptions\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Osen\\Subscriptions\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true,
+        "preferred-install": "dist",
+        "optimize-autoloader": true
     }
-},
 }
