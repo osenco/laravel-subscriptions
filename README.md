@@ -1,2 +1,3 @@
-# laravel-subscriptions
+# Laravel Subscriptions
+
 Laravel subscription package
