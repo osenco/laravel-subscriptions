@@ -32,7 +32,14 @@ return new class extends Migration
                 'triennialy',
                 'years',
             ]);
+            $table->integer('interval_count')->default(1);
+            $table->integer('trial_period_days')->default(0);
+            $table->integer('sort_order')->default(0);
+            $table->boolean('active')->default(true);
             $table->decimal('price', 10, 2);
+            $table->decimal('setup_fee', 10, 2)->default(0);
+            $table->decimal('signup_fee', 10, 2)->default(0);
+            $table->string('currency', 3)->default('USD');
             $table->json('discounts')->nullable();
             $table->json('features')->nullable();
             

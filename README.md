@@ -51,14 +51,20 @@ $plan = SubsriptionPlan::create([
     'trial_period_days' => 30,
     'active' => true,
 ]);
-// OR use the Plan Facade
+```
 
-$plan->called('Basic')
+OR use the Plan Facade
+
+```php
+use Osen\Subscriptions\Facades\Plan;
+
+...
+
+Plan::called('Basic')
     ->describedAs('Basic plan')
     ->pricedAt(1000)
-    ->interval('month')
-    ->intervalCount(1)
-    ->trialPeriodDays(30)
+    ->interval('month') // or interval('months', 5)
+    ->trialDays(30)
     ->active()
     ->save();
 ```

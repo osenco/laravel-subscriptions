@@ -124,4 +124,15 @@ class Subscription extends Model
         $this->ends_at->addDays($period);
         return $this;
     }
+
+    function cancel($end = false){
+        $this->canceled_at = now();
+
+        if($end){
+            $this->ends_at = now();
+        }
+
+        $this->save();
+        return $this;
+    }
 }
